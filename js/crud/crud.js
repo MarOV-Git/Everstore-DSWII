@@ -5,18 +5,20 @@ class Crud {
         this.db.settings(settings)
     }
 
-    insertarProducto(nombre, price, developer, distribuitor) {
-        return this.db.collection('productos').add({
+    insertarLibro(nombre, price, autor, categoria, imglink) {
+        return this.db.collection('libros').add({
                 nombre: nombre,
                 price: price,
-                developer: developer,
-                distribuitor: distribuitor
+                categoria: categoria,
+                autor: autor,
+                imglink: imglink,
+                fecha: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then(refDoc => {
-                console.log(`Id del post => ${refDoc.id}`);
+                console.log(`Id del libro => ${refDoc.id}`);
             })
             .catch(error => {
-                console.log(`Error creando el post => ${error}`);
+                console.log(`Error creando el libro => ${error}`);
             })
     }
 
@@ -41,6 +43,26 @@ class Crud {
         })
     }
 
+
+    consultarRecientes() {
+        this.db.collection(`libros`).orderBy("fecha", "desc").limit(5).onSnapshot(querySnapshot => {
+            $('#contenido').empty()
+            if (querySnapshot.empty) {} else {
+                querySnapshot.forEach(lib => {
+                    let libHtml = this.obtenerCover(
+                        lib.data().imglink,
+                        lib.data().nombre,
+                        lib.data().autor
+                    )
+                    $('#contenido').append(libHtml)
+                })
+            }
+
+
+        })
+    }
+
+
     delete(id) {
         this.db.collection("productos").doc(id).delete().then(() => {
             alert("Producto eliminado con éxito!");
@@ -48,6 +70,45 @@ class Crud {
         }).catch((error) => {
             alert("Error al eliminar producto: ", error);
         });
+    }
+
+
+
+    subirPortadaLibro(file, uid){
+        const refStorage = firebase.storage()
+        .ref(`coverBooks/${uid}/${file.name}`)
+
+
+        const task = refStorage.put(file)
+        task.on('state_changed', snapshot => {
+            const porcentaje = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+            $('#pbLibro').attr('style', `width:${porcentaje}%`);
+            $('#pbLibro').text(`${porcentaje}%`);
+            console.log('cargando');
+        },
+      err =>{
+        alert(`Error subiendo el archivo ${error.message}!!`);
+      },
+      ()=>{
+        task.snapshot.ref.getDownloadURL()
+        .then( url => {
+            console.log(url)
+            sessionStorage.setItem('imgNewCover', url)
+        })
+        .catch(err => {
+          alert(`Error obteniendo downloadURL ${error.message} !!`);
+        })
+      }
+    )}
+
+    obtenerCover(link,title,autor) {
+        return `
+        <div class="col-sm">
+        <div style="height: 300px;background: url('${link}'), url('img/default.jpg');background-size: cover;background-position: center;width: 100%;"></div>
+          <p class="cov-title">${title}</p>
+            <p class="cov-little">${autor}</p>
+        </div>
+`
     }
 
 

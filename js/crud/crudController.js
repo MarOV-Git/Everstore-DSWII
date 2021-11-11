@@ -2,31 +2,55 @@ $(() => {
 
     const crud = new Crud()
 
-    $('#btnAdd').click(() => {
+    $('#btnRegistroLibro').click(() => {
         const user = firebase.auth().currentUser
 
         if (user == null) {
-            Alert(`Para insertar un producto necesita estar autenticado.`)
+            alert(`Para insertar un producto necesita estar autenticado.`)
             return
         } else {
-            const nombre = $('#nameProduct').val()
-            const price = $('#priceProduct').val()
-            const developer = $('#developerProduct').val()
-            const distribuitor = $('#distribuitorProduct').val()
-
-            crud.insertarProducto(nombre, price, developer, distribuitor)
-                .then(
-                    resp => {
-                        alert(`Producto registrado correctamente`)
-                        $('#nameProduct').val('')
-                        $('#priceProduct').val('')
-                        $('#developerProduct').val('')
-                        $('#distribuitorProduct').val('')
-                    })
-                .catch(err => {
-                    alert(`Error => ${err}`)
+            const nombre = $('#nombreLibroReg').val()
+            const price = $('#precioLibroReg').val()
+            const autor = $('#autorReg').val()
+            const categoria = $('#cboCategoria option:selected').text()
+            const imagelink = sessionStorage.getItem('imgNewCover') == 'null'? null : sessionStorage.getItem('imgNewCover')
+            const uploadedOrNot = $('#pbLibro').width()==360?true:false;
+            if(nombre ==""|| price==""||autor==""){
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'No deje espacios en blanco!',
                 })
-        }
+            }
+            else if (categoria =="Categoria"){
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Tiene que seleccionar una categoría!',
+                })
+            }
+            else if (uploadedOrNot == false){
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'No ha subido ninguna imagen!',
+                })
+            }
+            else{
+              crud.insertarLibro(nombre,price,autor,categoria,imagelink).then(resp =>{
+                Swal.fire({
+                    icon: 'success',
+                    title: `Libro agregado correctamente`,
+                    showConfirmButton: false,
+                    timer: 2000
+                  })
+                  window.setTimeout(function() {
+
+                      window.location.href = "addLibro.html";
+                  }, 1000);
+              });
+            }
+          }
 
     })
 
@@ -36,4 +60,13 @@ $(() => {
 
     })
 
+    $('#btnUploadFile').on('change', e=>{
+        const file = e.target.files[0]
+
+        const user = firebase.auth().currentUser
+
+        const crud = new Crud();
+
+        crud.subirPortadaLibro(file, user.uid)
+    });
 });

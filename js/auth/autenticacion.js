@@ -4,7 +4,7 @@ class Autenticacion {
       const settings = { timestampsInSnapshots: true }
       this.db.settings(settings)
   }
- 
+
     autEmailPass(email, password) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(result => {

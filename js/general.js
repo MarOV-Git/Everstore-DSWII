@@ -1,5 +1,4 @@
 $(() => {
-
   $("#btnAdd").click(function(event) {
       event.preventDefault();
   });
@@ -14,27 +13,28 @@ $(() => {
 
     const crud = new Crud()
 
-    crud.consultarTodosItems()
+    crud.consultarRecientes()
+
 
 
 var tipoUsuario = "Admin";
 
     firebase.auth().onAuthStateChanged(user => {
 
-      const usuario = this.db.collection("usuarios").where("email", "==", user.email).where("tipo", "==","Admin");
-        usuario.get().then( (qsnapshot) => {
-          if (qsnapshot.docs.length > 0) {
-           console.log("Es admin");
-           $('#mantSec').removeClass('d-none')
-        }
-        else {
-          console.log("No es admin");
-          $('#mantSec').addClass('d-none')
-        }
-        })
-
-
         if (user) {
+          const usuario = this.db.collection("usuarios").where("email", "==", user.email).where("tipo", "==","Admin");
+            usuario.get().then( (qsnapshot) => {
+              if (qsnapshot.docs.length > 0) {
+               console.log("Es admin");
+               $('#mantSec').removeClass('d-none')
+               owo = "owo"
+            }
+            else {
+              console.log("No es admin");
+             $('#mantSec').addClass('d-none')
+             }
+            })
+
           if(user.displayName){
             $('#unlog').addClass('d-none');
             $('#logued').removeClass('d-none');
