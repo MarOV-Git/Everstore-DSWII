@@ -19,15 +19,6 @@
 	<!-- Collection of nav links, forms, and other content for toggling -->
 	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
 		<div class="navbar-nav">
-       <div class="nav-item dropdown">
-        <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Libros</a>
-        <div class="dropdown-menu">
-          <a href="#" class="dropdown-item">Web Design</a>
-          <a href="#" class="dropdown-item">Web Development</a>
-          <a href="#" class="dropdown-item">Graphic Design</a>
-          <a href="#" class="dropdown-item">Digital Marketing</a>
-        </div>
-            </div>
 			<div class="nav-item dropdown">
 				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Categorias</a>
 				<div class="dropdown-menu">
@@ -37,16 +28,14 @@
 					<a href="#" class="dropdown-item">Digital Marketing</a>
 				</div>
             </div>
-            <div class="nav-item dropdown">
-      				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Series</a>
-      				<div class="dropdown-menu">
-      					<a href="#" class="dropdown-item">Web Design</a>
-      					<a href="#" class="dropdown-item">Web Development</a>
-      					<a href="#" class="dropdown-item">Graphic Design</a>
-      					<a href="#" class="dropdown-item">Digital Marketing</a>
-      				</div>
-                  </div>
-			<a href="#" class="nav-item nav-link">Contacto</a>
+
+						<div class="nav-item dropdown">
+							<a id="mantSec" href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle d-none">Mantenimiento</a>
+							<div class="dropdown-menu">
+								<a href="#" class="dropdown-item">Usuarios</a>
+								<a href="addLibro.html" class="dropdown-item">Libros</a>
+							</div>
+									</div>
         </div>
 		<form class="navbar-form form-inline search-form">
 			<div class="input-group">
@@ -56,13 +45,6 @@
 				</span>
 			</div>
 		</form>
-		<div class="nav-item dropdown">
-			<a id="mantSec" href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle d-none">Mantenimiento</a>
-			<div class="dropdown-menu">
-				<a href="#" class="dropdown-item">Usuarios</a>
-				<a href="addLibro.html" class="dropdown-item">Libros</a>
-			</div>
-					</div>
 		<div id="unlog" class="navbar-nav ml-auto">
 			<div class="nav-item dropdown login-dropdown">
 				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Login</a>
