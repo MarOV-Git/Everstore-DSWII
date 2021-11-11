@@ -1,0 +1,229 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+    background-color: #E8E8E8;
+}
+
+.body-reg{
+	background: linear-gradient( rgba(232,232,232,0.7), rgba(232,232,232,0.5) ), url('../img/bg2.jpg');
+	background-position: center;
+	background-size: cover;
+}
+
+.form-control {
+	box-shadow: none;
+	border-radius: 4px;
+	border-color: #dfe3e8;
+}
+
+.lf{
+	margin-right: 5px !important;
+}
+
+.divider-text {
+    position: relative;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 30px !important;
+}
+
+.bg-main{
+	border-color: #625261 !important;
+ background-color: 	#625261 !important;
+}
+
+.color-main{
+ color:	rgba(255,255,255,.5) !important;
+}
+
+.color-main-hov:hover{
+	color:	#fff !important;
+}
+
+.divider-text span {
+    padding: 7px;
+    font-size: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.dr-l{
+	width: 80px !important;
+}
+.navbar {
+	background: #625261 !important;
+	padding-left: 16px;
+	padding-right: 16px;
+	border-bottom: 1px solid #dfe3e8;
+	border-radius: 0;
+}
+.navbar .navbar-brand {
+	font-size: 20px;
+	padding-left: 0;
+	padding-right: 50px;
+}
+.navbar .navbar-brand b {
+	color: #89BEB3;
+}
+.navbar a, .navbar a:active {
+	color: #999;
+}
+.navbar .navbar-nav a:hover, .navbar .navbar-nav a:focus {
+  color: #E8E8E8 !important;;
+}
+.navbar .navbar-nav > a.active, .navbar .navbar-nav.show > a {
+	color: #E8E8E8 !important;
+}
+.navbar .form-inline .input-group-text {
+	box-shadow: none;
+	border-radius: 2px 0 0 2px;
+	background: #f5f5f5;
+	border-color: #dfe3e8;
+	font-size: 16px;
+}
+.navbar .form-inline i {
+	font-size: 16px;
+}
+.navbar .form-inline .btn {
+	border-radius: 2px;
+	  color: #E8E8E8 !important;
+	border-color: #89BEB3;
+	background: #89BEB3;
+	outline: none;
+}
+.navbar .form-inline .btn:hover, .navbar .form-inline .btn:focus {
+	border-color: #83b7ac;
+	background: #83b7ac;
+}
+.navbar .search-form {
+	display: inline-block;
+}
+.navbar .search-form .btn {
+	margin-left: 4px;
+}
+.navbar .search-form .form-control {
+	border-radius: 2px;
+}
+.navbar .login-form .input-group {
+	margin-right: 4px;
+	float: left;
+}
+.navbar .login-form .form-control {
+	max-width: 150px;
+	border-radius: 0 2px 2px 0;
+}
+.navbar .navbar-right .dropdown-toggle::after {
+	display: none;
+}
+.navbar .dropdown-menu {
+	font-size: 14px;
+	border-radius: 1px;
+	border-color: #e5e5e5;
+	box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.navbar .dropdown-menu a {
+	padding: 6px 20px;
+}
+.navbar .login-dropdown .dropdown-menu {
+	width: 505px;
+	padding: 20px;
+	left: auto;
+	right: 0;
+}
+.navbar .login-dropdown .dropdown-toggle::after {
+	display: none;
+}
+
+.container-social{
+  max-width: 250px;
+}
+
+.container-home{
+  background: url('../img/bg.jpg');
+  background-position: top;
+  background-size: cover;
+}
+
+.divider-text{
+  margin: 20px 0px 10px 0px;
+  text-align: center;
+  width: 100%
+}
+
+.divider-text span{
+  padding: 10px
+}
+.container-text{
+
+    padding-top: 350px;
+
+      color: white;
+}
+.banner-text{
+  font-style: italic;
+  font-size: 30px;
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(90deg, rgba(2,0,36,0.2) 0%, rgba(98,82,97,1) 100%, rgba(0,212,255,1) 100%);;
+}
+
+.title{
+  text-align: center;
+  margin:20px;
+  font-weight: bold;
+  color: #625261;
+}
+
+.img-cov{
+  max-width: 80%;
+   display: block;
+   margin: auto;
+}
+
+.cov-title{
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 0px;
+}
+
+.cov-little{
+  text-align: center;
+  font-size: 12px;
+  color: #666666;
+}
+
+footer .footer-copyright{
+  background-color: #625261 !important;
+}
+
+footer .cov-title{
+  color: rgba(255,255,255,.5);
+}
+
+@media (min-width: 1200px){
+	.search-form .input-group {
+		width: 300px;
+		margin-left: 30px;
+	}
+
+
+}
+@media (max-width: 768px){
+	.navbar .dropdown-menu {
+		width: 100%;
+		padding: 10px 20px;
+	}
+	.navbar .input-group {
+		width: 100%;
+		margin-bottom: 15px;
+	}
+	.navbar .input-group .form-control {
+		max-width: none;
+	}
+	.navbar .login-form .btn {
+		width: 100%;
+	}
+
+  .login-dropdown .dropdown-menu{
+    width: 100% !important;
+  }
+}
