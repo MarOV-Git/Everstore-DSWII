@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="d-flex flex-column min-vh-100 body-addlib">
+<body class="d-flex flex-column min-vh-100" >
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-light">
 	<a href="index.html" class="navbar-brand"><i class="fa fa-eercast" aria-hidden="true" style="margin-right:10px"></i>Ever<b>Store</b></a>
 	<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -45,7 +45,6 @@
 				</span>
 			</div>
 		</form>
-
 		<div id="unlog" class="navbar-nav ml-auto">
 			<div class="nav-item dropdown login-dropdown">
 				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Login</a>
@@ -57,7 +56,7 @@
 									<span class="fa fa-user"></span>
 								</span>
 							</div>
-                            <input type="text" class="form-control" placeholder="E-mail" required>
+                            <input type="text" id="emailSesion" class="form-control" placeholder="E-mail" required>
                         </div>
                         <div class="input-group">
 							<div class="input-group-prepend">
@@ -65,9 +64,9 @@
 									<i class="fa fa-lock"></i>
 								</span>
 							</div>
-                            <input type="text" class="form-control" placeholder="Contraseña" required>
+                            <input type="password" id="passwordSesion" class="form-control" placeholder="Contraseña" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button id="btnInicioEmail"type="submit" class="btn btn-primary">Login</button>
                         <p class="divider-text">
                                 <span>También puedes iniciar sesión con...</span>
                             </p>
@@ -77,7 +76,7 @@
                           <a id="authGo" href="#" class="fa fa-google-plus-square" style="font-size:35px" aria-hidden="true"></a>
                         </div>
                         <p class="divider-text">
-                                <span>¿No estas registrado?</span> <a class="nav-link" style="color:#625261" href="#">Registrate</a>
+                                <span>¿No estas registrado?</span> <a class="nav-link" style="color:#625261" href="register.html">Registrate</a>
                             </p>
                     </form>
 
@@ -101,70 +100,54 @@ Carrito</a>
 
 
 </nav>
-<div style="margin-top:50px;">
-		<article class="card-body mx-auto" style="max-width: 400px;">
-				<h1 class="card-title mt-3 text-center" style="margin:40px 0px">Registrar libro</h1>
-				<form>
-						<div class="form-group input-group">
-								<div class="input-group-prepend">
-										<span class="input-group-text w-40"> <i class="fa fa-book"></i> </span>
-								</div>
-								<input name="" id="nombreLibroReg" class="form-control" placeholder="Nombre" type="text">
-						</div>
-						<!-- form-group// -->
-						<div class="form-group input-group">
-								<div class="input-group-prepend">
-										<span class="input-group-text w-40"> <i class="fa fa-money"></i> </span>
-								</div>
-								<input name="" type="number" id="precioLibroReg" class="form-control" placeholder="Precio">
-						</div>
-						<!-- form-group// -->
-						<div class="form-group input-group">
-								<div class="input-group-prepend">
-										<span class="input-group-text w-40"> <i class="fa fa-user"></i> </span>
-								</div>
-								<input class="form-control" id="autorReg" placeholder="Autor" type="">
-						</div>
-            <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text w-40"> <i class="fa fa-circle-o-notch"></i> </span>
-                </div>
-                <select id="cboCategoria" class="form-control" id="exampleFormControlSelect1">
-                <option>Categoria</option>
-                <option>Terror</option>
-                <option>Drama</option>
-                <option>Fantasía</option>
-                <option>Acción</option>
-    </select>
-            </div>
-            <div class="form-group">
-  <label for="exampleFormControlFile1">Suba portada</label>
-  <input id="btnUploadFile" type="file" class="form-control-file" id="exampleFormControlFile1">
-  <div class="progress" style="margin-top:10px">
-  <div id="pbLibro"class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-</div>
-</div>
-						<!-- form-group// -->
-						<div class="form-group">
-								<a id="btnRegistroLibro" type="submit" class="btn btn-primary btn-block bg-main color-main color-main-hov">Registrar Libro </a>
-								<a   class="btn btn-primary btn-block bg-main color-main color-main-hov" href="readBook.html">Listar libros</a>
 
-						</div>
-						<!-- form-group// -->
-				</form>
-		</article>
+<div style="margin-top:50px" class="container">
+  <h1 class="title" style="text-align:left; margin:30px 0px">Pagar</h1>
+
+
+<div class="form-group row">
+  <form class="col-sm-7">
+  <div class="form-group">
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nombre en la tarjeta">
+   </div>
+   <div class="form-group">
+     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Número de tarjeta">
+    </div>
+    <div class="form-group row" style="margin:0px 0px 15px 0px">
+      <input type="email" class="form-control col-sm-6" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="MM/AA">
+      <input type="email" class="form-control col-sm-6" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="CVC">
+     </div>
+     <div class="form-group">
+       <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Código postal">
+      </div>
+ </form>
+
+<div class="col-sm-5">
+  <h2 class="title" style="text-align:left !important; margin:0px 0px 10px 0px;">Resumen</h2>
+	<b style="margin:0px; text-align:left">Total: <span id="totalPrecio">00.00</span>$</b>
+
+  <br>
+  <small >Everstore está obligado por ley a recaudar los impuestos sobre las transacciones de las compras realizadas en determinadas jurisdicciones fiscales.</small>
+<br>
+<br>
+  <a id="pagarCarrito" href="#" class="btn btn-success"  >Pagar</a>
 </div>
+
+
+</div>
+</div>
+
 
 <!--Footer -->
-<footer class="page-footer font-small blue mt-auto">
+<footer class=" mt-auto page-footer font-small blue">
   <!-- Copyright -->
   <div class="footer-copyright text-center py-3">
     <p class="cov-title"> © 2021 EverStore</p>
   </div>
-  <!-- Copyright -->
-
 </footer>
 </body>
+
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
@@ -177,8 +160,8 @@ Carrito</a>
 <script type="text/javascript" src="js/auth/autenticacion.js"></script>
 <script type="text/javascript" src="js/auth/authController.js"></script>
 <script type="text/javascript" src="js/crud/crud.js"></script>
-<script type="text/javascript" src="js/crud/crudController.js"></script>
 <script type="text/javascript" src="js/util/util.js"></script>
+<script type="text/javascript" src="js/crud/crudController.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </html>

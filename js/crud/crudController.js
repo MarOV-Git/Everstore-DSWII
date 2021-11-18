@@ -54,11 +54,43 @@ $(() => {
 
     })
 
+
+    $('#btnCarrito').click(() => {
+      const email = $('#data-email').text();
+      const imglink = $('#data-imglink').text();
+      const nombre = $('#data-nombre').text();
+      const autor = $('#data-autor').text();
+      const precio = $('#data-price').text();
+      const categoria = $('#data-categoria').text();
+      crud.registrarCarrito(email,imglink,nombre,autor,precio,categoria);
+    })
+
+
+
     $('#btnDelete').click(() => {
         const id = $('#data').text();
         crud.delete(id)
 
     })
+
+    $('#btnDeleteCarrito').click(() => {
+        const email = $('#data-email').text();
+        console.log(email);
+        const id = $('#data').text();
+        $('#totalPrecio').html('00.00');
+        crud.deleteCarrito(email, id)
+    })
+
+
+    $('#pagarCarrito').click(() => {
+        const email = $('#name-val').attr("data-email");
+        console.log(email);
+        console.log('awaw');
+        $('#totalPrecio').html('00.00');
+        crud.confirmarCarrito(email);
+    })
+
+
 
     $('#btnUploadFile').on('change', e=>{
         const file = e.target.files[0]

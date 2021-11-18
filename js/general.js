@@ -16,6 +16,12 @@ $(() => {
     crud.consultarRecientes()
 
 
+crud.consultarTodosItems();
+crud.consultarXcategoria('Acción');
+crud.consultarXcategoria('Terror');
+crud.consultarXcategoria('Drama');
+crud.consultarXcategoria('Fantasía');
+
 
 var tipoUsuario = "Admin";
 
@@ -38,7 +44,8 @@ var tipoUsuario = "Admin";
           if(user.displayName){
             $('#unlog').addClass('d-none');
             $('#logued').removeClass('d-none');
-            $('#user-name').html(`<i class="fa fa-user-o lf"></i><span id="name-val">${user.displayName}</span>`);
+            $('#user-name').html(`<i class="fa fa-user-o lf"></i><span data-email="${user.email}" id="name-val" class="name-val">${user.displayName}</span>`);
+            crud.consultarCarrito(`${user.email}`);
           }
             $('#avatar').removeClass('d-none')
             if (user.photoURL) {
