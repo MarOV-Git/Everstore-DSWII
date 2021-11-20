@@ -1,124 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Bootstrap Navbar with Inline Login Form in Dropdown</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Drama</title>
+    <link rel="shortcut icon" type="image/jpg" href="img/favicon.jpg" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="d-flex flex-column min-vh-100">
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-light">
-	<a href="index.html" class="navbar-brand"><i class="fa fa-eercast" aria-hidden="true" style="margin-right:10px"></i>Ever<b>Store</b></a>
-	<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+
+<body class="d-flex flex-column min-vh-100 body-drama">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-light">
+        <a href="index.html" class="navbar-brand"><i class="fa fa-eercast" aria-hidden="true" style="margin-right:10px"></i>Ever<b>Store</b></a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<!-- Collection of nav links, forms, and other content for toggling -->
-	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
-		<div class="navbar-nav">
-			<div class="nav-item dropdown">
-				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Categorias</a>
-				<div class="dropdown-menu">
-					<a href="terrorList.html" class="dropdown-item">Terror</a>
-					<a href="dramaList.html" class="dropdown-item">Drama</a>
-					<a href="fantasiaList.html" class="dropdown-item">Fantasía</a>
-					<a href="accionList.html" class="dropdown-item">Acción</a>
-				</div>
+        <!-- Collection of nav links, forms, and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+            <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                    <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle">Categorias</a>
+                    <div class="dropdown-menu">
+                        <a href="terrorList.html" class="dropdown-item">Terror</a>
+                        <a href="dramaList.html" class="dropdown-item">Drama</a>
+                        <a href="fantasiaList.html" class="dropdown-item">Fantasía</a>
+                        <a href="accionList.html" class="dropdown-item">Acción</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a id="mantSec" href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle d-none">Mantenimiento</a>
+                    <div class="dropdown-menu">
+                        <a href="readBook.html" class="dropdown-item">Libros</a>
+                    </div>
+                </div>
             </div>
 
-						<div class="nav-item dropdown">
-							<a id="mantSec" href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle d-none">Mantenimiento</a>
-							<div class="dropdown-menu">
-								<a href="#" class="dropdown-item">Usuarios</a>
-								<a href="readBook.html" class="dropdown-item">Libros</a>
-							</div>
-									</div>
-        </div>
-		<form class="navbar-form form-inline search-form">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Buscar...">
-				<span class="input-group-btn">
-					<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-				</span>
-			</div>
-		</form>
-		<div id="unlog" class="navbar-nav ml-auto">
-			<div class="nav-item dropdown login-dropdown">
-				<a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Login</a>
-				<div class="dropdown-menu">
-                    <form class="form-inline login-form">
-                        <div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
+            <div id="unlog" class="navbar-nav ml-auto">
+                <div class="nav-item dropdown login-dropdown">
+                    <a href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Login</a>
+                    <div class="dropdown-menu">
+                        <form class="form-inline login-form">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
 									<span class="fa fa-user"></span>
-								</span>
-							</div>
-                            <input type="text" id="emailSesion" class="form-control" placeholder="E-mail" required>
-                        </div>
-                        <div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
+                                    </span>
+                                </div>
+                                <input type="text" id="emailSesion" class="form-control" placeholder="E-mail" required>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
 									<i class="fa fa-lock"></i>
 								</span>
-							</div>
-                            <input type="password" id="passwordSesion" class="form-control" placeholder="Contraseña" required>
-                        </div>
-                        <button id="btnInicioEmail"type="submit" class="btn btn-primary">Login</button>
-                        <p class="divider-text">
+                                </div>
+                                <input type="password" id="passwordSesion" class="form-control" placeholder="Contraseña" required>
+                            </div>
+                            <button id="btnInicioEmail" type="submit" class="btn btn-primary">Login</button>
+                            <p class="divider-text">
                                 <span>También puedes iniciar sesión con...</span>
                             </p>
-                        <div class="container container-social">
-                          <a id="authFB" href="#"><span class="fa fa-facebook-square" style="font-size:35px" aria-hidden="true"></span></a>
-                          <a id="authTwitter" href="#"><span class="fa fa-twitter-square" style="font-size:35px" aria-hidden="true"></span></a>
-                          <a id="authGo" href="#" class="fa fa-google-plus-square" style="font-size:35px" aria-hidden="true"></a>
-                        </div>
-                        <p class="divider-text">
+                            <div class="container container-social">
+                                <a id="authFB" href="#"><span class="fa fa-facebook-square" style="font-size:35px" aria-hidden="true"></span></a>
+                                <a id="authTwitter" href="#"><span class="fa fa-twitter-square" style="font-size:35px" aria-hidden="true"></span></a>
+                                <a id="authGo" href="#" class="fa fa-google-plus-square" style="font-size:35px" aria-hidden="true"></a>
+                            </div>
+                            <p class="divider-text">
                                 <span>¿No estas registrado?</span> <a class="nav-link" style="color:#625261" href="register.html">Registrate</a>
                             </p>
-                    </form>
+                        </form>
 
 
+                    </div>
+                </div>
+            </div>
+
+            <div id="logued" class="navbar-nav d-none ml-auto">
+                <div class="nav-item dropdown login-dropdown">
+                    <a id="user-name" href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Usuario</a>
+                    <div class="dropdown-menu dr-l">
+                        <a href="carrito.html" class="dropdown-item"><i class="fa fa-shopping-cart lf" aria-hidden="true"></i>
+	Carrito</a>
+                        <a href="misLibros.html" class="dropdown-item"><i class="fa fa-book lf" aria-hidden="true"></i>Mis Libros</a>
+                        <a id="btn-logout" href="#" class="dropdown-item"><i class="fa fa-sign-in lf" aria-hidden="true"></i>Salir</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-				<div id="logued" class="navbar-nav d-none ml-auto">
-					<div class="nav-item dropdown login-dropdown">
-						<a id="user-name" href="#" data-toggle="dropdown" class="nav-item nav-link dropdown-toggle"><i class="fa fa-user-o"></i> Usuario</a>
-						<div class="dropdown-menu dr-l">
-							<a href="carrito.html" class="dropdown-item"><i class="fa fa-shopping-cart lf" aria-hidden="true"></i>
-	Carrito</a>
-							<a href="misLibros.html" class="dropdown-item"><i class="fa fa-book lf" aria-hidden="true"></i>Mis Libros</a>
-							<a id="btn-logout"href="#" class="dropdown-item"><i class="fa fa-sign-in lf" aria-hidden="true"></i>Salir</a>
-						</div>
-		            </div>
-		        </div>
-	</div>
+
+    </nav>
+
+    <div style="margin-top:50px">
+        <h1 class="title">Libros de Drama</h1>
+        <div class="container">
+            <div id="listaDrama" class="row">
+            </div>
+        </div>
+    </div>
 
 
-</nav>
+    <!--Footer -->
+    <footer class=" mt-auto page-footer font-small blue">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+            <p class="cov-title"> © 2021 EverStore</p>
+        </div>
+        <!-- Copyright -->
 
-<div style="margin-top:50px">
-  <h1 class="title">Libros de Drama</h1>
-  <div class="container">
-  <div id="listaDrama" class="row">
-  </div>
-</div>
-</div>
-
-
-<!--Footer -->
-<footer class=" mt-auto page-footer font-small blue">
-  <!-- Copyright -->
-  <div class="footer-copyright text-center py-3">
-    <p class="cov-title"> © 2021 EverStore</p>
-  </div>
-  <!-- Copyright -->
-
-</footer>
+    </footer>
 </body>
 
 <div class="modal" tabindex="-1" id="carritoModal" role="dialog">
@@ -132,12 +127,14 @@
             </div>
             <div class="modal-body">
                 <p>¿Esta seguro de que desea añadir este elemento al carrito?</p>
-								<span id="data-email" style="display:none">id</span>
-								<span id="data-imglink" style="display:none">id</span>
-								<span id="data-nombre" style="display:none">id</span>
-								<span id="data-autor" style="display:none">id</span>
-								<span id="data-price" style="display:none">id</span>
-								<span id="data-categoria" style="display:none">id</span>
+                <span id="data-email" style="display:none">id</span>
+                <span id="data-imglink" style="display:none">id</span>
+                <span id="data-pdflink" style="display:none">id</span>
+                <span id="data-nombre" style="display:none">id</span>
+                <span id="data-autor" style="display:none">id</span>
+                <span id="data-price" style="display:none">id</span>
+                <span id="data-categoria" style="display:none">id</span>
+                <span id="data-idlibro" style="display:none">id</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -164,4 +161,5 @@
 <script type="text/javascript" src="js/util/util.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 </html>

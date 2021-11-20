@@ -5,14 +5,49 @@ class Crud {
         this.db.settings(settings)
     }
 
-    insertarLibro(nombre, price, autor, categoria, imglink) {
-        return this.db.collection('libros').add({
-                nombre: nombre,
+    insertarLibro(nombre, price, autor, categoria, imglink, pdflink) {
+        return this.db.collection(`libros`).orderBy("idlibro", "desc").limit(1).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+
+                this.db.collection('libros').add({
+                        idlibro: (parseInt(doc.data().idlibro) + 1).toString(),
+                        nombre: nombre,
+                        price: price,
+                        categoria: categoria,
+                        autor: autor,
+                        imglink: imglink,
+                        pdflink: pdflink,
+                        fecha: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                    .then(refDoc => {
+                        $('#nombreLibroReg').val('')
+                        const price = $('#precioLibroReg').val('')
+                        const autor = $('#autorReg').val('')
+                        const categoria = $('#cboCategoria option:selected').text('Categoria')
+                        const uploadedOrNot = $('#pbLibro').width('0px');
+                        const pdfOrNot = $('#pbPDF').width('0px');
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Libro agregado correctamente`,
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
+                    })
+                    .catch(error => {
+                        console.log(`Error creando el libro => ${error}`);
+                    })
+            })
+        });
+    }
+
+
+    actualizarLibro(id, nombre, price, autor, categoria, imglink, pdflink) {
+        return this.db.collection('libros').doc(id).update({
+                autor: autor,
                 price: price,
                 categoria: categoria,
-                autor: autor,
                 imglink: imglink,
-                fecha: firebase.firestore.FieldValue.serverTimestamp()
+                pdflink: pdflink
             })
             .then(refDoc => {
                 console.log(`Id del libro => ${refDoc.id}`);
@@ -21,6 +56,7 @@ class Crud {
                 console.log(`Error creando el libro => ${error}`);
             })
     }
+
 
     consultarTodosItems() {
         this.db.collection(`libros`).onSnapshot(querySnapshot => {
@@ -34,7 +70,8 @@ class Crud {
                         lib.data().autor,
                         lib.data().price,
                         lib.data().categoria,
-                        lib.id
+                        lib.id,
+                        lib.data().pdflink
                     )
                     $('#contenidoCompleto').append(libHtml)
                 })
@@ -62,187 +99,301 @@ class Crud {
                         lib.data().precio,
                         lib.id
                     )
-                    $('#totalPrecio').html((actual+auxiliar).toFixed(2))
+                    $('#totalPrecio').html((actual + auxiliar).toFixed(2))
                     $('#carritoCompleto').append(libHtml)
                 })
+
             }
-
-
+            $('#auxPrecio').html($('#totalPrecio').html())
         })
     }
 
 
-   confirmarCarrito(email) {
+
+    confirmarCarrito(email) {
         this.db.collection(`${email}-carrito`).onSnapshot(querySnapshot => {
+            if (querySnapshot.empty) {
 
-            if (querySnapshot.empty) {} else {
+            } else {
                 querySnapshot.forEach(lib => {
-                this.db.collection(`${email}-libros`).add({
-                          imglink: lib.data().imglink,
-                          nombre: lib.data().nombre,
-                          autor: lib.data().autor,
-                          categoria: lib.data().categoria
-                      })
+                    const libros = this.db.collection(`${email}-libros`).where("idlibro", "==", lib.data().idlibro);
+                    libros.get().then((qsnapshot) => {
+                        if (qsnapshot.docs.length > 0) {} else {
+                            this.db.collection(`${email}-libros`).add({
+                                idlibro: lib.data().idlibro,
+                                imglink: lib.data().imglink,
+                                nombre: lib.data().nombre,
+                                autor: lib.data().autor,
+                                categoria: lib.data().categoria,
+                                pdflink: lib.data().pdflink
+                            }).then(() => {
+                                $('#auxPrecio').html('00.00');
+                                $('#totalPrecio').html('00.00');
+                                $('#auxPrecio').html('00.00');
+                                this.db.collection(`${email}-carrito`).doc(`${lib.id}`).delete().then(() => {
+                                    $('#auxPrecio').html('00.00');
+                                    $('#totalPrecio').html('00.00');
+                                    $('#auxPrecio').html('00.00');
+                                }).catch((error) => {});
+                            }).catch((error) => {});
 
-                    this.db.collection(`${email}-carrito`).doc(`${lib.id}`).delete().then(() => {
-                      Swal.fire({
-                          icon: 'success',
-                          title: `¡Gracias por tu compra!`,
-                          showConfirmButton: false,
-                          timer: 2000
-                        })
 
-                        window.setTimeout(function() {
+                        }
 
-                            window.location.href = "misLibros.html";
-                        }, 1500);
-}).catch((error) => {
-  Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: `Ha ocurrido un error ${error}`,
-    })
-});
-                    $('#totalPrecio').html('00.00')
+                    })
                 })
             }
-
-
         })
+
+        Swal.fire({
+            icon: 'success',
+            title: ` Comprado correctamente`,
+            showConfirmButton: false,
+            timer: 2000
+        })
+        $('#deleteModal').modal('toggle');
     }
 
 
 
 
 
-    registrarCarrito(email,imglink,nombre,autor,precio,categoria){
-  const libros = this.db.collection(`${email}-libros`).where("nombre", "==", nombre);
-  libros.get().then( (qsnapshot) => {
-    if (qsnapshot.docs.length > 0) {
-      Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Ya has comprado este libro',
-        })
-          $('#carritoModal').modal('toggle');
-  }
-  else{
-      const usuario = this.db.collection(`${email}-carrito`).where("nombre", "==", nombre);
-        usuario.get().then( (qsnapshot) => {
-          if (qsnapshot.docs.length > 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Este libro ya ha sido añadido al carrito',
-              })
-                $('#carritoModal').modal('toggle');
-        }
-        else{
-          return this.db.collection(`${email}-carrito`).add({
-                  email: email,
-                  imglink: imglink,
-                  nombre: nombre,
-                  autor: autor,
-                  precio: precio,
-                  categoria: categoria
-              })
-              .then(refDoc => {
-                Swal.fire({
-                    icon: 'success',
-                    title: `Libro añadido al carrito`,
-                    showConfirmButton: false,
-                    timer: 2000
-                  })
-                  $('#carritoModal').modal('toggle');
-              })
-              .catch(error => {
+    registrarCarrito(email, imglink, nombre, autor, precio, categoria, pdflink, idlibro) {
+        const libros = this.db.collection(`${email}-libros`).where("nombre", "==", nombre);
+        libros.get().then((qsnapshot) => {
+            if (qsnapshot.docs.length > 0) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: `Ha ocurrido un error al añadir el libro: ${error}`,
-                  })
-              })
+                    text: 'Ya has comprado este libro',
+                })
 
-              }
+            } else {
+                const usuario = this.db.collection(`${email}-carrito`).where("nombre", "==", nombre);
+                usuario.get().then((qsnapshot) => {
+                    if (qsnapshot.docs.length > 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Este libro ya ha sido añadido al carrito',
+                        })
+                    } else {
+                        return this.db.collection(`${email}-carrito`).add({
+                                email: email,
+                                imglink: imglink,
+                                nombre: nombre,
+                                autor: autor,
+                                precio: precio,
+                                categoria: categoria,
+                                pdflink: pdflink,
+                                idlibro: idlibro
+                            })
+                            .then(refDoc => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: `Libro añadido al carrito`,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                })
 
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: `Ha ocurrido un error al añadir el libro: ${error}`,
+                                })
+                            })
+
+                    }
+
+                })
+            }
         })
-      }
-      })
 
     }
 
 
     consultarXcategoria(categoria) {
-        this.db.collection(`libros`).where('categoria','==', categoria).onSnapshot(querySnapshot => {
+        this.db.collection(`libros`).where('categoria', '==', categoria).onSnapshot(querySnapshot => {
 
-            switch(categoria){
-              case "Terror":
-              $('#listaTerror').empty()
-              if (querySnapshot.empty) {} else {
-                  querySnapshot.forEach(lib => {
-                      let libHtml = this.obtenerLista(
-                          lib.data().imglink,
-                          lib.data().nombre,
-                          lib.data().autor,
-                          lib.data().price,
-                          lib.id,
-                          categoria
-                      )
-                      $('#listaTerror').append(libHtml)
-                  })
-              }
-              break;
-              case "Acción":
-              $('#listaAccion').empty()
-              if (querySnapshot.empty) {} else {
-                  querySnapshot.forEach(lib => {
-                      let libHtml = this.obtenerLista(
-                          lib.data().imglink,
-                          lib.data().nombre,
-                          lib.data().autor,
-                          lib.data().price,
-                          lib.id,
-                          categoria
-                      )
-                      $('#listaAccion').append(libHtml)
-                  })
-              }
-              break;
-              case "Fantasía":
-              $('#listaFantasia').empty()
-              if (querySnapshot.empty) {} else {
-                  querySnapshot.forEach(lib => {
-                      let libHtml = this.obtenerLista(
-                          lib.data().imglink,
-                          lib.data().nombre,
-                          lib.data().autor,
-                          lib.data().price,
-                          lib.id,
-                          categoria
-                      )
-                      $('#listaFantasia').append(libHtml)
-                  })
-              }
-              break;
-              case "Drama":
-              $('#listaDrama').empty()
-              if (querySnapshot.empty) {} else {
-                  querySnapshot.forEach(lib => {
-                      let libHtml = this.obtenerLista(
-                          lib.data().imglink,
-                          lib.data().nombre,
-                          lib.data().autor,
-                          lib.data().price,
-                          lib.id,
-                          categoria
-                      )
-                      $('#listaDrama').append(libHtml)
-                  })
-              }
-              break;
+            switch (categoria) {
+                case "Terror":
+                    $('#listaTerror').empty()
+                    if (querySnapshot.empty) {} else {
+                        querySnapshot.forEach(lib => {
+                            let libHtml = this.obtenerLista(
+                                lib.data().imglink,
+                                lib.data().nombre,
+                                lib.data().autor,
+                                lib.data().price,
+                                lib.id,
+                                categoria,
+                                btoa(lib.data().pdflink),
+                                lib.data().idlibro
+                            )
+                            $('#listaTerror').append(libHtml)
+                        })
+                    }
+                    break;
+                case "Acción":
+                    $('#listaAccion').empty()
+                    if (querySnapshot.empty) {} else {
+                        querySnapshot.forEach(lib => {
+                            let libHtml = this.obtenerLista(
+                                lib.data().imglink,
+                                lib.data().nombre,
+                                lib.data().autor,
+                                lib.data().price,
+                                lib.id,
+                                categoria,
+                                btoa(lib.data().pdflink),
+                                lib.data().idlibro
+                            )
+                            $('#listaAccion').append(libHtml)
+                        })
+                    }
+                    break;
+                case "Fantasía":
+                    $('#listaFantasia').empty()
+                    if (querySnapshot.empty) {} else {
+                        querySnapshot.forEach(lib => {
+                            let libHtml = this.obtenerLista(
+                                lib.data().imglink,
+                                lib.data().nombre,
+                                lib.data().autor,
+                                lib.data().price,
+                                lib.id,
+                                categoria,
+                                btoa(lib.data().pdflink),
+                                lib.data().idlibro
+                            )
+                            $('#listaFantasia').append(libHtml)
+                        })
+                    }
+                    break;
+                case "Drama":
+                    $('#listaDrama').empty()
+                    if (querySnapshot.empty) {} else {
+                        querySnapshot.forEach(lib => {
+                            let libHtml = this.obtenerLista(
+                                lib.data().imglink,
+                                lib.data().nombre,
+                                lib.data().autor,
+                                lib.data().price,
+                                lib.id,
+                                categoria,
+                                btoa(lib.data().pdflink),
+                                lib.data().idlibro
+                            )
+                            $('#listaDrama').append(libHtml)
+                        })
+                    }
+                    break;
             }
         })
     }
+
+
+
+    consultarMisLibros(email, categoria) {
+        switch (categoria) {
+            case "Todos":
+                this.db.collection(`${email}-libros`).onSnapshot(querySnapshot => {
+                    $('#miLibreria').empty()
+                    if (querySnapshot.empty) {
+
+                        let libHtml = this.emptyListBook()
+                        $('#miLibreria').append(libHtml);
+                    } else {
+                        querySnapshot.forEach(leb => {
+
+                            this.db.collection(`libros`).where('idlibro', '==', leb.data().idlibro).onSnapshot(querySnapshot => {
+                                if (querySnapshot.empty) {} else {
+                                    querySnapshot.forEach(lib => {
+                                        let libHtml = this.miLibreria(
+                                            lib.data().imglink,
+                                            lib.data().nombre,
+                                            lib.data().autor,
+                                            lib.id,
+                                            lib.data().categoria,
+                                            lib.data().pdflink
+                                        )
+                                        $('#miLibreria').append(libHtml)
+                                        $('.emptyTotal').css('display', 'none');
+                                    })
+                                }
+                            })
+
+
+
+                        })
+
+
+
+
+
+
+
+
+                    }
+
+
+                })
+                break;
+            default:
+                this.db.collection(`${email}-libros`).where('categoria', '==', categoria).onSnapshot(querySnapshot => {
+                    $('#miLibreria').empty()
+                    if (querySnapshot.empty) {
+                        let libHtml = this.emptyListCat()
+                        $('#miLibreria').append(libHtml);
+                    } else {
+                        querySnapshot.forEach(leb => {
+
+                            this.db.collection(`libros`).where('idlibro', '==', leb.data().idlibro).onSnapshot(querySnapshot => {
+                                if (querySnapshot.empty) {
+                                    let libHtml = this.emptyListCat()
+                                    $('#miLibreria').append(libHtml);
+                                } else {
+                                    querySnapshot.forEach(lib => {
+                                        let libHtml = this.miLibreria(
+                                            lib.data().imglink,
+                                            lib.data().nombre,
+                                            lib.data().autor,
+                                            lib.id,
+                                            lib.data().categoria,
+                                            lib.data().pdflink
+                                        )
+                                        $('.alertEmpty').css('display', 'none');
+                                        $('#miLibreria').append(libHtml)
+                                    })
+                                }
+                            })
+
+
+
+                        })
+
+
+
+
+
+
+
+
+                    }
+
+
+                })
+
+
+
+
+
+        }
+
+    }
+
 
     consultarRecientes() {
         this.db.collection(`libros`).orderBy("fecha", "desc").limit(5).onSnapshot(querySnapshot => {
@@ -266,94 +417,163 @@ class Crud {
 
     deleteCarrito(email, id) {
         this.db.collection(`${email}-carrito`).doc(id).delete().then(() => {
-          Swal.fire({
-              icon: 'success',
-              title: `Libro eliminado del carrito correctamente`,
-              showConfirmButton: false,
-              timer: 2000
+            Swal.fire({
+                icon: 'success',
+                title: `Libro eliminado del carrito correctamente`,
+                showConfirmButton: false,
+                timer: 2000
             })
             $('#deleteModal').modal('toggle');
         }).catch((error) => {
-          Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Error al eliminar libro!',
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error al eliminar libro!',
             })
         });
     }
 
     delete(id) {
         this.db.collection("libros").doc(id).delete().then(() => {
-          Swal.fire({
-              icon: 'success',
-              title: `Libro eliminado correctamente`,
-              showConfirmButton: false,
-              timer: 2000
+            Swal.fire({
+                icon: 'success',
+                title: `Libro eliminado correctamente`,
+                showConfirmButton: false,
+                timer: 2000
             })
             $('#deleteModal').modal('toggle');
         }).catch((error) => {
-          Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Error al eliminar libro!',
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error al eliminar libro!',
             })
         });
     }
 
 
-
-    subirPortadaLibro(file, uid){
+    subirPdf(file, uid) {
         const refStorage = firebase.storage()
-        .ref(`coverBooks/${uid}/${file.name}`)
+            .ref(`pdfBooks/${uid}/${file.name}`)
 
 
         const task = refStorage.put(file)
         task.on('state_changed', snapshot => {
-            const porcentaje = snapshot.bytesTransferred / snapshot.totalBytes * 100;
-            $('#pbLibro').attr('style', `width:${porcentaje}%`);
-            $('#pbLibro').text(`${porcentaje}%`);
-            console.log('cargando');
-        },
-      err =>{
-        alert(`Error subiendo el archivo ${error.message}!!`);
-      },
-      ()=>{
-        task.snapshot.ref.getDownloadURL()
-        .then( url => {
-            console.log(url)
-            sessionStorage.setItem('imgNewCover', url)
-        })
-        .catch(err => {
-          alert(`Error obteniendo downloadURL ${error.message} !!`);
-        })
-      }
-    )}
+                const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes * 100).toFixed(2);
+                $('#pbPDF').attr('style', `width:${porcentaje}%`);
+                $('#pbPDF').text(`${porcentaje}%`);
+                console.log('cargando');
+            },
+            err => {
+                alert(`Error subiendo el archivo ${error.message}!!`);
+            },
+            () => {
+                task.snapshot.ref.getDownloadURL()
+                    .then(url => {
+                        console.log(url)
+                        sessionStorage.setItem('imgNewPdf', url)
+                    })
+                    .catch(err => {
+                        alert(`Error obteniendo downloadURL ${error.message} !!`);
+                    })
+            }
+        )
+    }
 
-    obtenerCover(link,title,autor,price,id) {
+
+
+    subirPortadaLibro(file, uid) {
+        const refStorage = firebase.storage()
+            .ref(`coverBooks/${uid}/${file.name}`)
+
+
+        const task = refStorage.put(file)
+        task.on('state_changed', snapshot => {
+                const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes * 100).toFixed(2);
+                $('#pbLibro').attr('style', `width:${porcentaje}%`);
+                $('#pbLibro').text(`${porcentaje}%`);
+                console.log('cargando');
+            },
+            err => {
+                alert(`Error subiendo el archivo ${error.message}!!`);
+            },
+            () => {
+                task.snapshot.ref.getDownloadURL()
+                    .then(url => {
+                        console.log(url)
+                        sessionStorage.setItem('imgNewCover', url)
+                    })
+                    .catch(err => {
+                        alert(`Error obteniendo downloadURL ${error.message} !!`);
+                    })
+            }
+        )
+    }
+
+
+
+
+    precioTag(precio) {
         return `
+      <span style="display:none" id="totalTag">${precio}</span>
+      `
+    }
 
+    emptyListBook() {
+        return `
+      <div class="alert alert-danger emptyTotal" role="alert" style="margin:auto">
+        No tienes ningún libro comprado.
+        </div>
+         `
+    }
+
+    emptyListCat() {
+        return `
+      <div class="alert alert-danger alertEmpty" role="alert" style="margin:auto">
+        No tienes libros que pertenezcan a esta categoría.
+        </div>
+         `
+    }
+
+    obtenerCover(link, title, autor, price, id) {
+        return `
         <div class="col-sm" onmouseover="revealBuyOption('${id}')" onmouseout="hideBuyOption('${id}')">
         <div style="cursor:pointer; height: 300px;background: url('${link}'), url('img/default.jpg');background-size: cover;background-position: center;width: 100%;"></div>
           <p id="titleBook" class="cov-title">${title}</p>
-            <p id="autorBook" class="cov-little">${autor}</p> 
+            <p id="autorBook" class="cov-little">${autor}</p>
          </div>
 `
     }
 
 
-    obtenerLista(link,title,autor,price,id,categoria) {
+    obtenerLista(link, title, autor, price, id, categoria, pdflink, idlibro) {
         return `
-        <div class="col-sm-3" onmouseover="revealBuyOption('${id}')" onmouseout="hideBuyOption('${id}')">
+        <div class="col-sm-3" onmouseover="revealBuyOption('A${id}')" onmouseout="hideBuyOption('A${id}')">
         <div style="cursor:pointer; height: 300px;background: url('${link}'), url('img/default.jpg');background-size: cover;background-position: center;width: 100%;"></div>
-          <p id="titleBook" class="${id}-book cov-title">${title}</p>
-            <p id="autorBook" style="margin-bottom:0px" class="${id}-book cov-little">${autor}</p>
-            <p id="priceBook" class="${id}-book cov-little">Precio: ${price}</p>
-            <div   class="${id}-button container btn btn-warning secret-btn bloc-hov" onclick="addCarrito('${link}','${title}','${autor}','${price}','${categoria}')" data-toggle="modal" data-target="#carritoModal"  >Agregar al carrito</div>
+          <p id="titleBook" class="A${id}-book cov-title">${title}</p>
+            <p id="autorBook" style="margin-bottom:0px" class="A${id}-book cov-little">${autor}</p>
+            <p id="priceBook" class="A${id}-book cov-little">Precio: ${price}</p>
+            <div   class="A${id}-button container btn btn-warning secret-btn bloc-hov" onclick="addCarrito('${idlibro}','${link}','${title}','${autor}','${price}','${categoria}','${pdflink}')" data-toggle="modal" data-target="#carritoModal"  >Agregar al carrito</div>
         </div>
     `
     }
 
-    obtenerCarritoTemplate(link,title,autor,precio, id) {
+
+    miLibreria(link, title, autor, id, categoria, pdflink) {
+        return `
+        <div class="col-sm-3 librosItem " onmouseover="revealReadOption('A${id}')" onmouseout="hideReadOption('A${id}')" >
+        <div style="cursor:pointer; height: 300px;background: url('${link}'), url('img/default.jpg');background-size: cover;background-position: center;width: 100%;"></div>
+          <p id="titleBook" class="A${id}-book cov-title ">${title}</p>
+            <p id="autorBook" style="margin-bottom:0px" class="A${id}-book cov-little">${autor}</p>
+            <div   class="A${id}-button container btn btn-warning secret-btn bloc-hov bg-main" onclick="viewPdf('${pdflink}')" style="color:rgba(255,255,255,.5)  " data-toggle="modal" data-target="#PedigreesSireRacing"  >Leer</div>
+         </div>
+    `
+    }
+
+
+
+
+    obtenerCarritoTemplate(link, title, autor, precio, id) {
         return `
     <tr>
       <td class="th-image"> <div style="cursor:pointer; height: 100px;width: 70px;margin:auto; background: url('${link}'), url('img/default.jpg');background-size: cover;background-position: center;"></div>
@@ -362,13 +582,13 @@ class Crud {
       <td>${autor}</td>
       <td class="precio-carrito" onload="calcularTotal()">${precio}</td>
       <td><button class="btn btn-danger" onclick="eliminarDeCarrito('${id}','${precio}')" data-toggle="modal" data-target="#deleteModal">Eliminar</button></td>
-    </tr> `
+     </tr> `
     }
 
 
 
 
-    obtenerListaTemplate(link,title,autor,precio, categoria, id) {
+    obtenerListaTemplate(link, title, autor, precio, categoria, id, pdflink) {
         return `
     <tr>
       <td class="th-image">        <div style="cursor:pointer; height: 100px;width: 70px;margin:auto; background: url('${link}'), url('img/default.jpg');background-size: cover;background-position: center;"></div>
@@ -378,6 +598,7 @@ class Crud {
       <td>${precio}</td>
       <td class="th-image">${categoria}</td>
       <td><button class="btn btn-danger" onclick="eliminar('${id}')" data-toggle="modal" data-target="#deleteModal">Eliminar</button></td>
+        <td><button class="btn btn-warning" onclick="actualizar('${id}','${link}','${title}','${autor}','${precio}','${categoria}','${pdflink}')" data-toggle="modal" data-target="#updateModal">Actualizar</button></td>
     </tr> `
     }
 }

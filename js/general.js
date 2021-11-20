@@ -1,7 +1,7 @@
 $(() => {
-  $("#btnAdd").click(function(event) {
-      event.preventDefault();
-  });
+    $("#btnAdd").click(function(event) {
+        event.preventDefault();
+    });
 
 
     $('.tooltipped').tooltip({ delay: 50 })
@@ -16,37 +16,38 @@ $(() => {
     crud.consultarRecientes()
 
 
-crud.consultarTodosItems();
-crud.consultarXcategoria('Acción');
-crud.consultarXcategoria('Terror');
-crud.consultarXcategoria('Drama');
-crud.consultarXcategoria('Fantasía');
+    crud.consultarTodosItems();
+    crud.consultarXcategoria('Acción');
+    crud.consultarXcategoria('Terror');
+    crud.consultarXcategoria('Drama');
+    crud.consultarXcategoria('Fantasía');
 
 
-var tipoUsuario = "Admin";
+    var tipoUsuario = "Admin";
 
     firebase.auth().onAuthStateChanged(user => {
 
         if (user) {
-          const usuario = this.db.collection("usuarios").where("email", "==", user.email).where("tipo", "==","Admin");
-            usuario.get().then( (qsnapshot) => {
-              if (qsnapshot.docs.length > 0) {
-               console.log("Es admin");
-               $('#mantSec').removeClass('d-none')
-               owo = "owo"
-            }
-            else {
-              console.log("No es admin");
-             $('#mantSec').addClass('d-none')
-             }
+            const usuario = this.db.collection("usuarios").where("email", "==", user.email).where("tipo", "==", "Admin");
+            usuario.get().then((qsnapshot) => {
+                if (qsnapshot.docs.length > 0) {
+                    console.log("Es admin");
+                    $('#mantSec').removeClass('d-none')
+                    owo = "owo"
+                } else {
+                    console.log("No es admin");
+                    $('#mantSec').addClass('d-none')
+                }
             })
 
-          if(user.displayName){
-            $('#unlog').addClass('d-none');
-            $('#logued').removeClass('d-none');
-            $('#user-name').html(`<i class="fa fa-user-o lf"></i><span data-email="${user.email}" id="name-val" class="name-val">${user.displayName}</span>`);
-            crud.consultarCarrito(`${user.email}`);
-          }
+            if (user.displayName) {
+                $('#unlog').addClass('d-none');
+                $('#logued').removeClass('d-none');
+                $('#user-name').html(`<i class="fa fa-user-o lf"></i><span data-email="${user.email}" id="name-val" class="name-val">${user.displayName}</span>`);
+                crud.consultarCarrito(`${user.email}`);
+                var miCategoria = $('#misCategorias').attr("data-micategoria");
+                crud.consultarMisLibros(`${user.email}`, `Todos`);
+            }
             $('#avatar').removeClass('d-none')
             if (user.photoURL) {
                 $('#avatar').attr('src', user.photoURL)
@@ -68,9 +69,9 @@ var tipoUsuario = "Admin";
 
 
 
-    $("form").submit(function(e){
-     e.preventDefault();
- });
+    $("form").submit(function(e) {
+        e.preventDefault();
+    });
 
     $('#btnInicioSesion').click(() => {
 
@@ -135,12 +136,12 @@ var tipoUsuario = "Admin";
         const usuario = $('#name-val').html();
         firebase.auth().signOut()
             .then(() => {
-              Swal.fire({
-                title: '¡Adios!',
-                text: `Hasta la proxima ${usuario}`,
-                imageUrl: 'img/bye.png',
-                imageWidth: 400,
-                imageAlt: 'Custom image',
+                Swal.fire({
+                    title: '¡Adios!',
+                    text: `Hasta la proxima ${usuario}`,
+                    imageUrl: 'img/bye.png',
+                    imageWidth: 400,
+                    imageAlt: 'Custom image',
                 })
                 window.setTimeout(function() {
 
@@ -148,12 +149,12 @@ var tipoUsuario = "Admin";
                 }, 1500);
             })
             .catch(error => {
-              Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: `Ocurrió un problema al realizar el SignOut ${error}`,
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `Ocurrió un problema al realizar el SignOut ${error}`,
+                })
             })
-         })
 
     })
 
