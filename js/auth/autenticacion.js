@@ -87,14 +87,13 @@ class Autenticacion {
                                       })
                                       .then(refDoc => {
                                           console.log(`Id del usuario => ${refDoc.id}`);
+                                            window.setTimeout(function() {
+                                              window.location.href = "index.html";
+                                            }, 1500);
                                       })
                                       .catch(error => {
                                           console.log(`Error creando el usuario => ${error}`);
 
-                                                          window.setTimeout(function() {
-
-                                                              window.location.href = "index.html";
-                                                          }, 1500);
                                       })
                               }
                           })
