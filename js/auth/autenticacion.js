@@ -19,6 +19,9 @@ class Autenticacion {
                         imageAlt: 'Custom image',
                     })
                 } else {
+                  $('#mantenimiento').addClass('d-none') 
+                    $('#unlog').removeClass('d-none');
+                    $('#logued').addClass('d-none');
                     $('#avatar').addClass('d-none')
                     firebase.auth().signOut()
                     Swal.fire({
