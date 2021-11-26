@@ -19,11 +19,11 @@ class Autenticacion {
                         imageAlt: 'Custom image',
                     })
                 } else {
-                  $('#mantenimiento').addClass('d-none') 
+                    firebase.auth().signOut()
+                    $('#mantenimiento').addClass('d-none')
                     $('#unlog').removeClass('d-none');
                     $('#logued').addClass('d-none');
                     $('#avatar').addClass('d-none')
-                    firebase.auth().signOut()
                     Swal.fire({
                         title: '¡Hola!',
                         text: `Tu cuenta no esta verificada, realiza el proceso antes de ingresar.`,
