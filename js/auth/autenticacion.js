@@ -1,1 +1,241 @@
-class Autenticacion{constructor(){this.db=firebase.firestore();this.db.settings({timestampsInSnapshots:!0})}autEmailPass(e,i){firebase.auth().signInWithEmailAndPassword(e,i).then(e=>{e.user.emailVerified?($("#avatar").removeClass("d-none"),$("#avatar").attr("src","img/usuario_auth.png"),Swal.fire({title:"¡Hola!",text:`Bienvenido ${e.user.displayName}, debes realizar el proceso de verificación`,imageUrl:"img/wait.png",imageWidth:400,imageAlt:"Custom image"})):($("#avatar").addClass("d-none"),firebase.auth().signOut(),Swal.fire({title:"¡Hola!",text:"Tu cuenta no esta verificada, realiza el proceso antes de ingresar.",imageUrl:"img/wait.png",imageWidth:400,imageAlt:"Custom image"}),$("#loginModal").modal("toggle"))}).catch(e=>{console.error(e),Swal.fire({icon:"error",title:"Oops...",text:e.message,footer:""})})}crearCuentaEmailPass(e,i,a){firebase.auth().createUserWithEmailAndPassword(e,i).then(e=>{e.user.sendEmailVerification({url:"http://localhost/gameinc/registro.html"}).catch(e=>{console.error(e),Swal.fire({icon:"error",title:"Oops...",text:e.message,footer:""})}),firebase.auth().signOut(),Swal.fire({title:"¡Hola!",text:`Bienvenido ${a}, debes realizar el proceso de verificación`,imageUrl:"img/wait.png",imageWidth:400,imageAlt:"Custom image"}),window.setTimeout(function(){window.location.href="index.html"},1500)}).catch(e=>{console.error(e),Swal.fire({icon:"error",title:"Oops...",text:e.message,footer:""})})}authCuentaGoogle(){const e=new firebase.auth.GoogleAuthProvider;firebase.auth().signInWithPopup(e).then(e=>{this.db.collection("usuarios").where("email","==",e.user.email).get().then(i=>{if(!(i.docs.length>0))return this.db.collection("usuarios").add({nombre:e.user.displayName,email:e.user.email,tipo:"Usuario"}).then(e=>{console.log(`Id del usuario => ${e.id}`)}).catch(e=>{console.log(`Error creando el usuario => ${e}`)});console.log("Usuario ya almacenado")}),Swal.fire({title:"¡Hola!",text:`Bienvenido ${e.user.displayName}`,imageUrl:"img/hi.png",imageWidth:400,imageAlt:"Custom image"}),window.setTimeout(function(){},1500)}).catch(e=>{console.error(e),Swal.fire(`Error al autenticarse ${e} !! `)})}authCuentaFacebook(){const e=new firebase.auth.FacebookAuthProvider;firebase.auth().signInWithPopup(e).then(e=>{this.db.collection("usuarios").where("email","==",e.user.email).get().then(i=>{if(!(i.docs.length>0))return this.db.collection("usuarios").add({nombre:e.user.displayName,email:e.user.email,tipo:"Usuario"}).then(e=>{console.log(`Id del usuario => ${e.id}`)}).catch(e=>{console.log(`Error creando el usuario => ${e}`)});console.log("Usuario ya almacenado")}),Swal.fire({title:"¡Hola!",text:`Bienvenido ${e.user.displayName}`,imageUrl:"img/hi.png",imageWidth:400,imageAlt:"Custom image"})}).catch(e=>{console.error(e),Swal.fire({icon:"error",title:"Oops...",text:`Error al autenticarse ${e}`,footer:""})})}authTwitter(){const e=new firebase.auth.TwitterAuthProvider;firebase.auth().signInWithPopup(e).then(e=>{this.db.collection("usuarios").where("email","==",e.user.email).get().then(i=>{if(!(i.docs.length>0))return this.db.collection("usuarios").add({nombre:e.user.displayName,email:e.user.email,tipo:"Usuario"}).then(e=>{console.log(`Id del usuario => ${e.id}`)}).catch(e=>{console.log(`Error creando el usuario => ${e}`)});console.log("Usuario ya almacenado")}),Swal.fire({title:"¡Hola!",text:`Bienvenido ${e.user.displayName}`,imageUrl:"img/hi.png",imageWidth:400,imageAlt:"Custom image"})}).catch(e=>{console.error(e),Swal.fire({icon:"error",title:"Oops...",text:`Error al autenticarse ${e}`,footer:""})})}}
+class Autenticacion {
+    constructor() {
+        this.db = firebase.firestore();
+        const settings = { timestampsInSnapshots: true }
+        this.db.settings(settings)
+    }
+
+    autEmailPass(email, password) {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(result => {
+                if (result.user.emailVerified) {
+                    $('#avatar').removeClass('d-none')
+                    $('#avatar').attr('src', 'img/usuario_auth.png')
+                    Swal.fire({
+                        title: '¡Hola!',
+                        text: `¡Bienvenido otra vez!`,
+                        imageUrl: 'img/wait.png',
+                        imageWidth: 400,
+                        imageAlt: 'Custom image',
+                    })
+                } else {
+                    $('#avatar').addClass('d-none')
+                    firebase.auth().signOut()
+                    Swal.fire({
+                        title: '¡Hola!',
+                        text: `Tu cuenta no esta verificada, realiza el proceso antes de ingresar.`,
+                        imageUrl: 'img/wait.png',
+                        imageWidth: 400,
+                        imageAlt: 'Custom image',
+                    })
+                    $('#loginModal').modal('toggle');
+                }
+            }).catch(error => {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.message,
+                    footer: ''
+                })
+            })
+
+
+    }
+
+    crearCuentaEmailPass(email, password, nombres) {
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((result) => {
+
+                const configuracion = {
+                    url: 'http://localhost/everstore/index.html'
+                }
+
+                result.user.sendEmailVerification(configuracion).catch(error => {
+                    console.error(error)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: error.message,
+                        footer: ''
+                    })
+
+                })
+                firebase.auth().signOut()
+                Swal.fire({
+                    title: '¡Hola!',
+                    text: `Bienvenido ${nombres}, debes realizar el proceso de verificación`,
+                    imageUrl: 'img/wait.png',
+                    imageWidth: 400,
+                    imageAlt: 'Custom image',
+                })
+
+                const usuario = this.db.collection("usuarios").where("email", "==", email);
+                          usuario.get().then((qsnapshot) => {
+                              if (qsnapshot.docs.length > 0) {
+                                  console.log('Usuario ya almacenado');
+                              } else {
+                                  return this.db.collection('usuarios').add({
+                                          nombre: nombres,
+                                          email: email,
+                                          tipo: "Usuario"
+                                      })
+                                      .then(refDoc => {
+                                          console.log(`Id del usuario => ${refDoc.id}`);
+                                      })
+                                      .catch(error => {
+                                          console.log(`Error creando el usuario => ${error}`);
+                                      })
+                              }
+                          })
+
+                window.setTimeout(function() {
+
+                    window.location.href = "index.html";
+                }, 1500);
+
+            })
+            .catch(error => {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: (error.message),
+                    footer: ''
+                })
+            })
+    }
+
+    authCuentaGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(result => {
+
+                const usuario = this.db.collection("usuarios").where("email", "==", result.user.email);
+                usuario.get().then((qsnapshot) => {
+                    if (qsnapshot.docs.length > 0) {
+                        console.log('Usuario ya almacenado');
+                    } else {
+                        return this.db.collection('usuarios').add({
+                                nombre: result.user.displayName,
+                                email: result.user.email,
+                                tipo: "Usuario"
+                            })
+                            .then(refDoc => {
+                                console.log(`Id del usuario => ${refDoc.id}`);
+                            })
+                            .catch(error => {
+                                console.log(`Error creando el usuario => ${error}`);
+                            })
+                    }
+                })
+
+
+                Swal.fire({
+                    title: '¡Hola!',
+                    text: `Bienvenido ${result.user.displayName}`,
+                    imageUrl: 'img/hi.png',
+                    imageWidth: 400,
+                    imageAlt: 'Custom image',
+                })
+                window.setTimeout(function() {}, 1500);
+            })
+            .catch(error => {
+                console.error(error)
+                Swal.fire(`Error al autenticarse ${error} !! `)
+            })
+
+    }
+
+
+    authCuentaFacebook() {
+
+        const provider = new firebase.auth.FacebookAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(result => {
+                const usuario = this.db.collection("usuarios").where("email", "==", result.user.email);
+                usuario.get().then((qsnapshot) => {
+                    if (qsnapshot.docs.length > 0) {
+                        console.log('Usuario ya almacenado');
+                    } else {
+                        return this.db.collection('usuarios').add({
+                                nombre: result.user.displayName,
+                                email: result.user.email,
+                                tipo: "Usuario"
+                            })
+                            .then(refDoc => {
+                                console.log(`Id del usuario => ${refDoc.id}`);
+                            })
+                            .catch(error => {
+                                console.log(`Error creando el usuario => ${error}`);
+                            })
+                    }
+                })
+
+
+                Swal.fire({
+                    title: '¡Hola!',
+                    text: `Bienvenido ${result.user.displayName}`,
+                    imageUrl: 'img/hi.png',
+                    imageWidth: 400,
+                    imageAlt: 'Custom image',
+                })
+            })
+            .catch(error => {
+                console.error(error)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `Error al autenticarse ${error}`,
+                    footer: ''
+                })
+            })
+
+    }
+
+
+
+
+
+    authTwitter() {
+        const provider = new firebase.auth.TwitterAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(result => {
+                const usuario = this.db.collection("usuarios").where("email", "==", result.user.email);
+                usuario.get().then((qsnapshot) => {
+                    if (qsnapshot.docs.length > 0) {
+                        console.log('Usuario ya almacenado');
+                    } else {
+                        return this.db.collection('usuarios').add({
+                                nombre: result.user.displayName,
+                                email: result.user.email,
+                                tipo: "Usuario"
+                            })
+                            .then(refDoc => {
+                                console.log(`Id del usuario => ${refDoc.id}`);
+                            })
+                            .catch(error => {
+                                console.log(`Error creando el usuario => ${error}`);
+                            })
+                    }
+                })
+
+
+                Swal.fire({
+                    title: '¡Hola!',
+                    text: `Bienvenido ${result.user.displayName}`,
+                    imageUrl: 'img/hi.png',
+                    imageWidth: 400,
+                    imageAlt: 'Custom image',
+                })
+            })
+            .catch(error => {
+                console.error(error)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `Error al autenticarse ${error}`,
+                    footer: ''
+                })
+            })
+    }
+}

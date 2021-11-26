@@ -161,7 +161,7 @@ class Crud {
 
 
     registrarCarrito(email, imglink, nombre, autor, precio, categoria, pdflink, idlibro) {
-        const libros = this.db.collection(`${email}-libros`).where("nombre", "==", nombre);
+        const libros = this.db.collection(`${email}-libros`).where("idlibro", "==", idlibro);
         libros.get().then((qsnapshot) => {
             if (qsnapshot.docs.length > 0) {
                 Swal.fire({
@@ -171,7 +171,7 @@ class Crud {
                 })
 
             } else {
-                const usuario = this.db.collection(`${email}-carrito`).where("nombre", "==", nombre);
+                const usuario = this.db.collection(`${email}-carrito`).where("idlibro", "==", idlibro);
                 usuario.get().then((qsnapshot) => {
                     if (qsnapshot.docs.length > 0) {
                         Swal.fire({
