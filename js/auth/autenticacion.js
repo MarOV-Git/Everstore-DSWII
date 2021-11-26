@@ -51,6 +51,24 @@ class Autenticacion {
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then((result) => {
+              const usuario = this.db.collection("usuarios").where("email", "==", email);
+                        usuario.get().then((qsnapshot) => {
+                            if (qsnapshot.docs.length > 0) {
+                                console.log('Usuario ya almacenado');
+                            } else {
+                                return this.db.collection('usuarios').add({
+                                        nombre: nombres,
+                                        email: email,
+                                        tipo: "Usuario"
+                                    })
+                                    .then(refDoc => {
+                                        console.log(`Id del usuario => ${refDoc.id}`);
+                                    })
+                                    .catch(error => {
+                                        console.log(`Error creando el usuario => ${error}`);
+                                    })
+                            }
+                        })
 
                 const configuracion = {
                     url: 'http://localhost/everstore/index.html'
@@ -75,24 +93,7 @@ class Autenticacion {
                     imageAlt: 'Custom image',
                 })
 
-                const usuario = this.db.collection("usuarios").where("email", "==", email);
-                          usuario.get().then((qsnapshot) => {
-                              if (qsnapshot.docs.length > 0) {
-                                  console.log('Usuario ya almacenado');
-                              } else {
-                                  return this.db.collection('usuarios').add({
-                                          nombre: nombres,
-                                          email: email,
-                                          tipo: "Usuario"
-                                      })
-                                      .then(refDoc => {
-                                          console.log(`Id del usuario => ${refDoc.id}`);
-                                      })
-                                      .catch(error => {
-                                          console.log(`Error creando el usuario => ${error}`);
-                                      })
-                              }
-                          })
+
 
                 window.setTimeout(function() {
 
