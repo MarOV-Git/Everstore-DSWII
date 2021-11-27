@@ -57,9 +57,9 @@ $(() => {
                   if (qsnapshot.docs.length < 0) {
                   } else {
                     qsnapshot.forEach(lib => {
-                      $('#unlog').addClass('d-none');
-                      $('#logued').removeClass('d-none');
-                      $('#user-name').html(`<i class="fa fa-user-o lf"></i><span data-email="${lib.data().email}" id="name-val" class="name-val">${lib.data().nombre}</span>`);
+                        $('#unlog').addClass('d-none');
+                        $('#logued').removeClass('d-none');
+                        $('#user-name').html(`<i class="fa fa-user-o lf"></i><span data-email="${lib.data().email}" id="name-val" class="name-val">${lib.data().nombre}</span>`);
                     })
                   }
               })
@@ -68,6 +68,8 @@ $(() => {
             }
 
         } else {
+            $('#unlog').removeClass('d-none');
+            $('#logued').addClass('d-none');
             $('#btnInicioSesion1').html('Iniciar Sesión')
             $('#btnInicioSesion2').html('Iniciar Sesión')
             $('#mantenimiento').addClass('d-none')

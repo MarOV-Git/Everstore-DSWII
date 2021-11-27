@@ -9,8 +9,6 @@ class Autenticacion {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(result => {
                 if (result.user.emailVerified) {
-                    $('#avatar').removeClass('d-none')
-                    $('#avatar').attr('src', 'img/usuario_auth.png')
                     Swal.fire({
                         title: '¡Hola!',
                         text: `¡Bienvenido otra vez!`,
@@ -20,10 +18,6 @@ class Autenticacion {
                     })
                 } else {
                     firebase.auth().signOut()
-                    $('#mantenimiento').addClass('d-none')
-                    $('#unlog').removeClass('d-none');
-                    $('#logued').addClass('d-none');
-                    $('#avatar').addClass('d-none')
                     Swal.fire({
                         title: '¡Hola!',
                         text: `Tu cuenta no esta verificada, realiza el proceso antes de ingresar.`,
@@ -32,6 +26,9 @@ class Autenticacion {
                         imageAlt: 'Custom image',
                     })
                     $('#loginModal').modal('toggle');
+                    window.setTimeout(function() {
+                      window.location.href = "index.html";
+                    }, 1500);
                 }
             }).catch(error => {
                 console.error(error);

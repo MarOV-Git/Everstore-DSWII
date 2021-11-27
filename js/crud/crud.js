@@ -161,6 +161,9 @@ class Crud {
 
 
     registrarCarrito(email, imglink, nombre, autor, precio, categoria, pdflink, idlibro) {
+      firebase.auth().onAuthStateChanged(user => {
+
+          if (user) {
         const libros = this.db.collection(`${email}-libros`).where("idlibro", "==", idlibro);
         libros.get().then((qsnapshot) => {
             if (qsnapshot.docs.length > 0) {
@@ -212,7 +215,15 @@ class Crud {
                 })
             }
         })
-
+      }
+      else{
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: `Necesitas iniciar sesión para realizar este proceso`,
+          })
+      }
+    })
     }
 
 

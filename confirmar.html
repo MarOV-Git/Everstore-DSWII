@@ -105,10 +105,10 @@ Carrito</a>
                     <input type="text" class="form-control" id="nomTarjeta" aria-describedby="emailHelp" placeholder="Nombre en la tarjeta">
                 </div>
                 <div class="form-group">
-                    <input type="number" class="form-control" id="numTarjet" aria-describedby="emailHelp" placeholder="Número de tarjeta">
+                    <input type="number"   pattern="\d*" class="form-control" id="numTarjet" aria-describedby="emailHelp" placeholder="Número de tarjeta">
                 </div>
                 <div class="form-group row" style="margin:0px 0px 15px 0px">
-                    <input type="text" class="form-control col-sm-6" id="fechaTarjeta" aria-describedby="emailHelp" placeholder="MM/AA">
+                    <input type="text"  maxlength="5"   class="form-control col-sm-6" id="fechaTarjeta" aria-describedby="emailHelp" placeholder="MM/AA">
                     <input type="number" class="form-control col-sm-6" id="cvcTarjeta" aria-describedby="emailHelp" placeholder="CVC">
                 </div>
                 <div class="form-group">
