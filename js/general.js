@@ -28,6 +28,9 @@ $(() => {
     firebase.auth().onAuthStateChanged(user => {
 
         if (user) {
+
+              $('#unlog').addClass('d-none');
+              $('#logued').removeClass('d-none');
             const usuario = this.db.collection("usuarios").where("email", "==", user.email).where("tipo", "==", "Admin");
             usuario.get().then((qsnapshot) => {
                 if (qsnapshot.docs.length > 0) {
@@ -57,8 +60,6 @@ $(() => {
                   if (qsnapshot.docs.length < 0) {
                   } else {
                     qsnapshot.forEach(lib => {
-                        $('#unlog').addClass('d-none');
-                        $('#logued').removeClass('d-none');
                         $('#user-name').html(`<i class="fa fa-user-o lf"></i><span data-email="${lib.data().email}" id="name-val" class="name-val">${lib.data().nombre}</span>`);
                     })
                   }

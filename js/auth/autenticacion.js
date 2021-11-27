@@ -16,6 +16,9 @@ class Autenticacion {
                         imageWidth: 400,
                         imageAlt: 'Custom image',
                     })
+
+                        $('#unlog').addClass('d-none');
+                        $('#logued').removeClass('d-none');
                 } else {
                     firebase.auth().signOut()
                     Swal.fire({
