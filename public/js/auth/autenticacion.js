@@ -52,7 +52,7 @@ class Autenticacion {
             .createUserWithEmailAndPassword(email, password)
             .then((result) => {
                 const configuracion = {
-                    url: 'http://localhost/everstore/index.html'
+                    url: 'https://everstore-fba41.web.app/index.html'
                 }
 
                 result.user.sendEmailVerification(configuracion).catch(error => {
@@ -80,16 +80,13 @@ class Autenticacion {
                               if (qsnapshot.docs.length > 0) {
                                   console.log('Usuario ya almacenado');
                               } else {
-                                  return this.db.collection('usuarios').add({
+                                  return this.db.collection('usuarios').doc(`${email}`).set({
                                           nombre: nombres,
                                           email: email,
                                           tipo: "Usuario"
                                       })
                                       .then(refDoc => {
                                           console.log(`Id del usuario => ${refDoc.id}`);
-                                            window.setTimeout(function() {
-                                              window.location.href = "index.html";
-                                            }, 1500);
                                       })
                                       .catch(error => {
                                           console.log(`Error creando el usuario => ${error}`);
@@ -110,6 +107,8 @@ class Autenticacion {
             })
     }
 
+
+
     authCuentaGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(result => {
@@ -119,7 +118,7 @@ class Autenticacion {
                     if (qsnapshot.docs.length > 0) {
                         console.log('Usuario ya almacenado');
                     } else {
-                        return this.db.collection('usuarios').add({
+                        return this.db.collection('usuarios').doc(`${result.user.email}`).set({
                                 nombre: result.user.displayName,
                                 email: result.user.email,
                                 tipo: "Usuario"
@@ -160,7 +159,7 @@ class Autenticacion {
                     if (qsnapshot.docs.length > 0) {
                         console.log('Usuario ya almacenado');
                     } else {
-                        return this.db.collection('usuarios').add({
+                        return this.db.collection('usuarios').doc(`${result.user.email}`).set({
                                 nombre: result.user.displayName,
                                 email: result.user.email,
                                 tipo: "Usuario"
@@ -207,7 +206,7 @@ class Autenticacion {
                     if (qsnapshot.docs.length > 0) {
                         console.log('Usuario ya almacenado');
                     } else {
-                        return this.db.collection('usuarios').add({
+                        return this.db.collection('usuarios').doc(`${result.user.email}`).set({
                                 nombre: result.user.displayName,
                                 email: result.user.email,
                                 tipo: "Usuario"

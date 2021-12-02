@@ -12,7 +12,7 @@ class Crud {
             querySnapshot.forEach((doc) => {
 
                 this.db.collection('libros').add({
-                        idlibro: (parseInt(doc.data().idlibro) + 1).toString(),
+                        idlibro: (parseInt(doc.data().idlibro) + 1),
                         nombre: nombre,
                         price: price,
                         categoria: categoria,
@@ -23,11 +23,15 @@ class Crud {
                     })
                     .then(refDoc => {
                         $('#nombreLibroReg').val('')
-                        const price = $('#precioLibroReg').val('')
-                        const autor = $('#autorReg').val('')
-                        const categoria = $('#cboCategoria option:selected').text('Categoria')
-                        const uploadedOrNot = $('#pbLibro').width('0px');
-                        const pdfOrNot = $('#pbPDF').width('0px');
+                       $('#precioLibroReg').val('')
+                         $('#autorReg').val('')
+                       $('#cboCategoria option:selected').text('Categoria')
+                       $('#pbLibro').width('0px');
+                       $('#pbPDF').width('0px');
+                        $('#pbLibro').text('')
+                        $('#pbPDF').text('')
+                        $("#btnUploadPDF").val(''),
+                        $("#btnUploadFile").val(''),
                         Swal.fire({
                             icon: 'success',
                             title: `Libro agregado correctamente`,
@@ -123,7 +127,7 @@ class Crud {
                     libros.get().then((qsnapshot) => {
                         if (qsnapshot.docs.length > 0) {} else {
                             this.db.collection(`${email}-libros`).add({
-                                idlibro: lib.data().idlibro,
+                                idlibro: parseInt(lib.data().idlibro),
                                 imglink: lib.data().imglink,
                                 nombre: lib.data().nombre,
                                 autor: lib.data().autor,
@@ -164,7 +168,7 @@ class Crud {
       firebase.auth().onAuthStateChanged(user => {
 
           if (user) {
-        const libros = this.db.collection(`${email}-libros`).where("idlibro", "==", idlibro);
+        const libros = this.db.collection(`${email}-libros`).where("idlibro", "==", parseInt(idlibro));
         libros.get().then((qsnapshot) => {
             if (qsnapshot.docs.length > 0) {
                 Swal.fire({
@@ -174,7 +178,7 @@ class Crud {
                 })
 
             } else {
-                const usuario = this.db.collection(`${email}-carrito`).where("idlibro", "==", idlibro);
+                const usuario = this.db.collection(`${email}-carrito`).where("idlibro", "==", parseInt(idlibro));
                 usuario.get().then((qsnapshot) => {
                     if (qsnapshot.docs.length > 0) {
                         Swal.fire({
@@ -191,7 +195,7 @@ class Crud {
                                 precio: precio,
                                 categoria: categoria,
                                 pdflink: pdflink,
-                                idlibro: idlibro
+                                idlibro: parseInt(idlibro)
                             })
                             .then(refDoc => {
                                 Swal.fire({
@@ -243,7 +247,7 @@ class Crud {
                                 lib.id,
                                 categoria,
                                 btoa(lib.data().pdflink),
-                                lib.data().idlibro
+                              parseInt(lib.data().idlibro)
                             )
                             $('#listaTerror').append(libHtml)
                         })
@@ -261,7 +265,7 @@ class Crud {
                                 lib.id,
                                 categoria,
                                 btoa(lib.data().pdflink),
-                                lib.data().idlibro
+                                parseInt(lib.data().idlibro)
                             )
                             $('#listaAccion').append(libHtml)
                         })
@@ -279,7 +283,7 @@ class Crud {
                                 lib.id,
                                 categoria,
                                 btoa(lib.data().pdflink),
-                                lib.data().idlibro
+                                parseInt(lib.data().idlibro)
                             )
                             $('#listaFantasia').append(libHtml)
                         })
@@ -297,7 +301,7 @@ class Crud {
                                 lib.id,
                                 categoria,
                                 btoa(lib.data().pdflink),
-                                lib.data().idlibro
+                                parseInt(lib.data().idlibro)
                             )
                             $('#listaDrama').append(libHtml)
                         })
@@ -321,7 +325,7 @@ class Crud {
                     } else {
                         querySnapshot.forEach(leb => {
 
-                            this.db.collection(`libros`).where('idlibro', '==', leb.data().idlibro).onSnapshot(querySnapshot => {
+                            this.db.collection(`libros`).where('idlibro', '==', parseInt(leb.data().idlibro)).onSnapshot(querySnapshot => {
                                 if (querySnapshot.empty) {} else {
                                     querySnapshot.forEach(lib => {
                                         let libHtml = this.miLibreria(
@@ -354,18 +358,14 @@ class Crud {
                 this.db.collection(`libros`).where('categoria', '==', categoria).onSnapshot(querySnapshot => {
                     $('#miLibreria').empty()
                     if (querySnapshot.empty) {
-                        let libHtml = this.emptyListCat()
-                        $('#miLibreria').append(libHtml);
                     } else {
                         querySnapshot.forEach(leb => {
 
-                            this.db.collection(`${email}-libros`).where('idlibro', '==', leb.data().idlibro).onSnapshot(querySnapshot => {
+                            this.db.collection(`${email}-libros`).where('idlibro', '==', parseInt(leb.data().idlibro)).onSnapshot(querySnapshot => {
                                 if (querySnapshot.empty) {
-                                    let libHtml = this.emptyListCat()
-                                    $('#miLibreria').append(libHtml);
                                 } else {
                                     querySnapshot.forEach(lib => {
-                                        this.db.collection(`libros`).where('idlibro', '==', lib.data().idlibro).onSnapshot(querySnapshot => {
+                                        this.db.collection(`libros`).where('idlibro', '==', parseInt(lib.data().idlibro)).onSnapshot(querySnapshot => {
                                             if (querySnapshot.empty) {
                                                 let libHtml = this.emptyListCat()
                                                 $('#miLibreria').append(libHtml);
@@ -467,15 +467,19 @@ class Crud {
 
 
     subirPdf(file, uid) {
+          $("#btnUploadPDF").val('')
+      const random =  Math.floor(Math.random() * (45451561687894156132 + 1) + 10000000200000);
         const refStorage = firebase.storage()
-            .ref(`pdfBooks/${uid}/${file.name}`)
-
-
+            .ref(`pdfBooks/${uid}/${random}_${file.name}`)
         const task = refStorage.put(file)
         task.on('state_changed', snapshot => {
-                const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes * 100).toFixed(2);
-                $('#pbPDF').attr('style', `width:${porcentaje}%`);
-                $('#pbPDF').text(`${porcentaje}%`);
+                var porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes * 100).toFixed(2);
+                if(porcentaje < 1){
+                  porcentaje = 30.00
+                }
+                console.log(porcentaje)
+                $('#pbPDF').attr('style', `width:${porcentaje-30}%`);
+                $('#pbPDF').text(`${(porcentaje-30).toFixed(2)}%`);
                 console.log('cargando');
             },
             err => {
@@ -484,11 +488,14 @@ class Crud {
             () => {
                 task.snapshot.ref.getDownloadURL()
                     .then(url => {
+
                         console.log(url)
                         sessionStorage.setItem('imgNewPdf', url)
-                    })
+                        $('#pbPDF').attr('style', `width:100%`);
+                        $('#pbPDF').text(`100.00%`);
+                     })
                     .catch(err => {
-                        alert(`Error obteniendo downloadURL ${error.message} !!`);
+                        alert(`Error obteniendo downloadURL ${err.message} !!`);
                     })
             }
         )
@@ -497,15 +504,21 @@ class Crud {
 
 
     subirPortadaLibro(file, uid) {
+      $("#btnUploadFile").val('')
+      const random =  Math.floor(Math.random() * (45451561687894156132 + 1) + 10000000200000);
+
         const refStorage = firebase.storage()
-            .ref(`coverBooks/${uid}/${file.name}`)
+            .ref(`coverBooks/${uid}/${random}_${file.name}`)
 
 
         const task = refStorage.put(file)
         task.on('state_changed', snapshot => {
-                const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes * 100).toFixed(2);
-                $('#pbLibro').attr('style', `width:${porcentaje}%`);
-                $('#pbLibro').text(`${porcentaje}%`);
+                var porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes * 100).toFixed(2);
+                if(porcentaje < 1){
+                  porcentaje = 30.00
+                }
+                $('#pbLibro').attr('style', `width:${porcentaje-30}%`);
+                $('#pbLibro').text(`${(porcentaje-30).toFixed(2)}%`);
                 console.log('cargando');
             },
             err => {
@@ -516,9 +529,11 @@ class Crud {
                     .then(url => {
                         console.log(url)
                         sessionStorage.setItem('imgNewCover', url)
+                        $('#pbLibro').attr('style', `width:100%`);
+                        $('#pbLibro').text(`100.00%`);
                     })
                     .catch(err => {
-                        alert(`Error obteniendo downloadURL ${error.message} !!`);
+                        alert(`Error obteniendo downloadURL ${err.message} !!`);
                     })
             }
         )

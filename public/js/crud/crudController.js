@@ -17,10 +17,10 @@ $(() => {
                     i = $("#precioLibroAct").val(),
                     l = $("#autorAct").val(),
                     n = $("#cboCategoria option:selected").text();
-                var e = "null" == sessionStorage.getItem("imgNewCover") ? null : sessionStorage.getItem("imgNewCover"),
-                    o = "null" == sessionStorage.getItem("imgNewPdf") ? null : sessionStorage.getItem("imgNewPdf");
-                const c = 360 == $("#pbLibro").width(),
-                    s = 360 == $("#pbPDF").width();
+                var e = "" == sessionStorage.getItem("imgNewCover") ? null : sessionStorage.getItem("imgNewCover"),
+                    o = "" == sessionStorage.getItem("imgNewPdf") ? null : sessionStorage.getItem("imgNewPdf");
+                const c = '100.00%' == $("#pbLibro").text(),
+                    s = '100.00%' == $("#pbPDF").text();
                 0 == c && (e = $("#data-imgaux").html()),
                     0 == s && (o = $("#data-pdfaux").html()),
                     "" == r || "" == i || "" == l
@@ -30,8 +30,10 @@ $(() => {
                         : t.actualizarLibro(a, r, i, l, n, e, o).then((t) => {
                               Swal.fire({ icon: "success", title: "Libro actualizado correctamente", showConfirmButton: !1, timer: 2e3 }),
                                   $("#updateModal").modal("toggle"),
-                                  $("#pbLibro").val(null),
-                                  $("#pbPDF").val(null),
+                                  $("#pbLibro").val(''),
+                                  $("#pbPDF").val(''),
+                                  $("#pbLibro").text(''),
+                                  $("#pbPDF").text(''),
                                   $("#pbLibro").width("0px"),
                                   $("#pbPDF").width("0px");
                           });
@@ -43,15 +45,15 @@ $(() => {
                     o = $("#precioLibroReg").val(),
                     a = $("#autorReg").val(),
                     r = $("#cboCategoria option:selected").text(),
-                    i = "null" == sessionStorage.getItem("imgNewCover") ? null : sessionStorage.getItem("imgNewCover"),
-                    l = "null" == sessionStorage.getItem("imgNewPdf") ? null : sessionStorage.getItem("imgNewPdf"),
-                    n = 360 == $("#pbLibro").width(),
-                    c = 360 == $("#pbPDF").width();
+                    i = "" == sessionStorage.getItem("imgNewCover") ? null : sessionStorage.getItem("imgNewCover"),
+                    l = "" == sessionStorage.getItem("imgNewPdf") ? null : sessionStorage.getItem("imgNewPdf"),
+                    n = '100.00%' == $("#pbLibro").text(),
+                    c ='100.00%'== $("#pbPDF").text();
                 "" == e || "" == o || "" == a
                     ? Swal.fire({ icon: "error", title: "Oops...", text: "No deje espacios en blanco!" })
                     : "Categoria" == r
                     ? Swal.fire({ icon: "error", title: "Oops...", text: "Tiene que seleccionar una categoría!" })
-                    : 0 == n || 0 == c
+                    : 0 == n
                     ? Swal.fire({ icon: "error", title: "Oops...", text: "No ha subido ninguna imagen!" })
                     : 0 == c
                     ? Swal.fire({ icon: "error", title: "Oops...", text: "No ha subido ningun pdf!" })
